@@ -1,19 +1,18 @@
 import { ImageResponse } from '@vercel/og';
-
-export const config = {
-  runtime: 'edge',
-};
-
-export default function handler(req) {
+import { NextRequest } from 'next/server';
+ 
+export const runtime = 'edge';
+ 
+export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
+    const { searchParams } = new URL(request.url);
     
     const episodes = searchParams.get('episodes') ?? '24';
     const weeklyEpisodes = searchParams.get('weeklyEpisodes') ?? '5';
     const listenTime = parseInt(searchParams.get('listenTime') ?? '1440');
     const readTime = parseInt(searchParams.get('readTime') ?? '360');
     
-    const formatTime = (minutes) => {
+    const formatTime = (minutes: number) => {
       const hours = Math.floor(minutes / 60);
       const mins = minutes % 60;
       return `${hours}ч ${mins}м`;
@@ -67,6 +66,10 @@ export default function handler(req) {
             <div style={{ fontSize: 18, color: '#93C5FD', marginLeft: 20 }}>
               Ваше сохранённое время
             </div>
+          </div>
+
+          <div style={{ marginTop: 'auto', fontSize: 18, color: '#93C5FD' }}>
+            Хотите продолжить экономить время?
           </div>
         </div>
       ),
